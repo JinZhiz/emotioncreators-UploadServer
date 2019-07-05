@@ -2,6 +2,86 @@
 I社 情感工坊上传下载服务器
 
 <br />
+
+<h1>注意</h1>
+游戏更新后，存档数据使用了 zip 进行压缩，因为这个项目目前已经有人维护，所以这边代码就不更新了。<br />
+数据压缩的方式并不复杂，只是用 zip 打包了下。<br />
+
+以下是游戏中的压缩和解压代码，使用到的是 C# 的 Ionic.Zip 代码库。<br />
+具体可使用 dnSpy 反编译游戏的 Assembly-CSharp.dll 查看类 ZipAssist<br />
+
+<br />
+<pre>
+<code>
+
+public byte[] SaveUnzipFile(byte[] srcBytes, EventHandler<SaveProgressEventArgs> callBack = null)
+{
+	byte[] result = null;
+	try
+	{
+		using (MemoryStream memoryStream = new MemoryStream(srcBytes))
+		{
+			ReadOptions options = new ReadOptions
+			{
+				Encoding = Encoding.GetEncoding("shift_jis")
+			};
+			using (ZipFile zipFile = ZipFile.Read(memoryStream, options))
+			{
+				ZipEntry zipEntry = zipFile[0];
+				using (MemoryStream memoryStream2 = new MemoryStream())
+				{
+					zipEntry.Extract(memoryStream2);
+					result = memoryStream2.ToArray();
+				}
+			}
+		}
+	}
+	catch (Exception ex)
+	{
+	}
+	return result;
+}
+
+public byte[] SaveZipBytes(byte[] srcBytes, string entryName, EventHandler<SaveProgressEventArgs> callBack = null)
+{
+	byte[] result = null;
+	try
+	{
+		using (ZipFile zipFile = new ZipFile(Encoding.GetEncoding("shift_jis")))
+		{
+			if (callBack != null)
+			{
+				zipFile.SaveProgress += callBack;
+			}
+			else
+			{
+				zipFile.SaveProgress += this.SaveProgress;
+			}
+			zipFile.AlternateEncodingUsage = ZipOption.Always;
+			zipFile.CompressionLevel = CompressionLevel.BestCompression;
+			zipFile.AddEntry(entryName, srcBytes);
+			long num = (long)srcBytes.Length;
+			using (MemoryStream memoryStream = new MemoryStream())
+			{
+				if (num % 65536L == 0L)
+				{
+					zipFile.ParallelDeflateThreshold = -1L;
+				}
+				zipFile.Save(memoryStream);
+				result = memoryStream.ToArray();
+			}
+		}
+	}
+	catch (Exception ex)
+	{
+	}
+	return result;
+}
+</code>
+</pre>
+
+<br />
+
 <h1>说明</h1>
 因为原本游戏的服务器封国内IP，我尝试着做了这个。<br />
 这些代码的功能是给 Illusion 社的 emotioncreators 当一个替代用的上传下载服务器。<br />
