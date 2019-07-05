@@ -5,7 +5,7 @@ I社 情感工坊上传下载服务器
 
 <h1>注意</h1>
 游戏更新后，存档数据使用了 zip 进行压缩，因为这个项目目前已经有人维护，所以这边代码就不更新了。<br />
-数据压缩的方式并不复杂，只是用 zip 打包了下。<br />
+数据压缩的方式并不复杂，只是用 zip 打包了下。<br /><br />
 
 以下是游戏中的压缩和解压代码，使用到的是 C# 的 Ionic.Zip 代码库。<br />
 具体可使用 dnSpy 反编译游戏的 Assembly-CSharp.dll 查看类 ZipAssist<br />
@@ -13,7 +13,6 @@ I社 情感工坊上传下载服务器
 <br />
 <pre>
 <code>
-
 public byte[] SaveUnzipFile(byte[] srcBytes, EventHandler<SaveProgressEventArgs> callBack = null)
 {
 	byte[] result = null;
@@ -41,7 +40,11 @@ public byte[] SaveUnzipFile(byte[] srcBytes, EventHandler<SaveProgressEventArgs>
 	}
 	return result;
 }
+</code>
+</pre>
 
+<pre>
+<code>
 public byte[] SaveZipBytes(byte[] srcBytes, string entryName, EventHandler<SaveProgressEventArgs> callBack = null)
 {
 	byte[] result = null;
