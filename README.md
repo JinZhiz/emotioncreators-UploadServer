@@ -15,6 +15,7 @@ I社 情感工坊上传下载服务器
 <br />
 <pre>
 <code>
+解压ZIP数据
 public byte[] SaveUnzipFile(byte[] srcBytes, EventHandler<SaveProgressEventArgs> callBack = null)
 {
 	byte[] result = null;
@@ -47,6 +48,7 @@ public byte[] SaveUnzipFile(byte[] srcBytes, EventHandler<SaveProgressEventArgs>
 
 <pre>
 <code>
+使用ZIP压缩数据
 public byte[] SaveZipBytes(byte[] srcBytes, string entryName, EventHandler<SaveProgressEventArgs> callBack = null)
 {
 	byte[] result = null;
